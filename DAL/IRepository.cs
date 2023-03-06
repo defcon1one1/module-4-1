@@ -1,9 +1,19 @@
 ﻿namespace module_4_1.DAL
 {
 
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<T> where T : class
     {
-        TEntity GetById(int id);
-        IEnumerable<TEntity> GetAll();
+        IEnumerable<T> GetAll();
+        T GetById(int id);
+        void Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
+        void SaveChanges();
+        IEnumerable<Course> GetActiveCourses();
+
+        IEnumerable<Student> GetAllStudents();
+        IEnumerable<Course> GetCoursesTakenByStudent(int studentId);
+        IEnumerable<ModuleGrade> GetGradesForStudentInCourse(int studentId, int courseId);
+
     }
 }
