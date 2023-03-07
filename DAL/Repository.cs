@@ -55,7 +55,15 @@ namespace module_4_1.DAL
         public IEnumerable<Course> GetCoursesTakenByStudent(int studentId)
         {
             return _context.CourseEnrollments
-                .Where(e => e.StudentId == studentId && e.IsCompleted)
+                .Where(e => e.StudentId == studentId && e.IsCompleted == false)
+                .Select(e => e.Course)
+                .ToList();
+        }
+
+        public IEnumerable<Course> GetCompletedCoursesTakenByStudent(int studentId)
+        {
+            return _context.CourseEnrollments
+                .Where(e => e.StudentId == studentId && e.IsCompleted == true)
                 .Select(e => e.Course)
                 .ToList();
         }

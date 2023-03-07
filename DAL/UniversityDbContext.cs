@@ -4,13 +4,8 @@ using System.Reflection.Emit;
 
 namespace module_4_1.DAL
 {
-
     public class UniversityDbContext : DbContext
     {
-        public UniversityDbContext(DbContextOptions<UniversityDbContext> options)
-            : base(options)
-        {
-        }
 
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
@@ -20,29 +15,65 @@ namespace module_4_1.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CourseEnrollment>()
-                .HasMany(ce => ce.ModuleGrades)
-                .WithOne(mg => mg.CourseEnrollment)
-                .HasForeignKey(mg => mg.CourseEnrollmentId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<CourseEnrollment>(eb =>
+            {
+                eb.HasKey(e => e.Id);
 
-            modelBuilder.Entity<Course>()
-                .HasMany(c => c.Modules)
-                .WithOne(m => m.Course)
-                .HasForeignKey(m => m.CourseId)
-                .OnDelete(DeleteBehavior.Cascade);
+                eb.HasMany(ce => ce.ModuleGrades)
+                    .WithOne(mg => mg.CourseEnrollment)
+                    .HasForeignKey(mg => mg.CourseEnrollmentId);
+            });
 
-            modelBuilder.Entity<Student>()
-                .HasMany(s => s.CourseEnrollments)
-                .WithOne(ce => ce.Student)
-                .HasForeignKey(ce => ce.StudentId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Course>(eb => {
 
-            modelBuilder.Entity<Course>()
-                .HasMany(c => c.CourseEnrollments)
-                .WithOne(ce => ce.Course)
-                .HasForeignKey(ce => ce.CourseId)
-                .OnDelete(DeleteBehavior.Cascade);
+                eb.HasKey(e => e.Id);
+
+                eb.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                eb.HasMany(c => c.Modules)
+                    .WithOne(m => m.Course)
+                    .HasForeignKey(m => m.CourseId);
+            });
+
+            modelBuilder.Entity<Student>(eb =>
+            {
+                eb.HasKey(e => e.Id);
+
+                eb.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                eb.HasMany(s => s.CourseEnrollments)
+                    .WithOne(ce => ce.Student)
+                    .HasForeignKey(ce => ce.StudentId);
+            });
+
+            modelBuilder.Entity<ModuleGrade>(eb =>
+            {
+                eb.HasKey(e => e.Id);
+
+                eb.ToTable(e => e.HasCheckConstraint("CK_ModuleGrade_Grade", "[Grade] BETWEEN 3 AND 5"));
+
+                eb.HasOne(mg => mg.Module)
+                    .WithMany()
+                    .HasForeignKey(mg => mg.ModuleId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                eb.HasOne(mg => mg.CourseEnrollment)
+                    .WithMany(ce => ce.ModuleGrades)
+                    .HasForeignKey(mg => mg.CourseEnrollmentId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+
+        }
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\mssqllocaldb;Initial Catalog=OnlineUniversityDb;Integrated Security=True");
         }
     }
 }
