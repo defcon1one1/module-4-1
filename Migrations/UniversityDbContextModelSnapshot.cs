@@ -58,9 +58,10 @@ namespace module_4_1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
-
                     b.HasIndex("StudentId");
+
+                    b.HasIndex("CourseId", "StudentId")
+                        .IsUnique();
 
                     b.ToTable("CourseEnrollments");
                 });
@@ -108,7 +109,8 @@ namespace module_4_1.Migrations
 
                     b.HasIndex("CourseEnrollmentId");
 
-                    b.HasIndex("ModuleId");
+                    b.HasIndex("ModuleId", "CourseEnrollmentId")
+                        .IsUnique();
 
                     b.ToTable("ModuleGrades", t =>
                         {
@@ -137,7 +139,7 @@ namespace module_4_1.Migrations
             modelBuilder.Entity("module_4_1.DAL.CourseEnrollment", b =>
                 {
                     b.HasOne("module_4_1.DAL.Course", "Course")
-                        .WithMany()
+                        .WithMany("CourseEnrollments")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -185,6 +187,8 @@ namespace module_4_1.Migrations
 
             modelBuilder.Entity("module_4_1.DAL.Course", b =>
                 {
+                    b.Navigation("CourseEnrollments");
+
                     b.Navigation("Modules");
                 });
 

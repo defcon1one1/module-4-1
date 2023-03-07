@@ -16,7 +16,7 @@ namespace module_4_1.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,7 +29,7 @@ namespace module_4_1.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,7 +43,6 @@ namespace module_4_1.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Grade = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -97,6 +96,7 @@ namespace module_4_1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ModuleGrades", x => x.Id);
+                    table.CheckConstraint("CK_ModuleGrade_Grade", "[Grade] BETWEEN 3 AND 5");
                     table.ForeignKey(
                         name: "FK_ModuleGrades_CourseEnrollments_CourseEnrollmentId",
                         column: x => x.CourseEnrollmentId,
@@ -111,9 +111,10 @@ namespace module_4_1.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseEnrollments_CourseId",
+                name: "IX_CourseEnrollments_CourseId_StudentId",
                 table: "CourseEnrollments",
-                column: "CourseId");
+                columns: new[] { "CourseId", "StudentId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseEnrollments_StudentId",
@@ -126,9 +127,10 @@ namespace module_4_1.Migrations
                 column: "CourseEnrollmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ModuleGrades_ModuleId",
+                name: "IX_ModuleGrades_ModuleId_CourseEnrollmentId",
                 table: "ModuleGrades",
-                column: "ModuleId");
+                columns: new[] { "ModuleId", "CourseEnrollmentId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Modules_CourseId",

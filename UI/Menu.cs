@@ -152,21 +152,26 @@ namespace module_4_1.UI
             }
 
             var coursesTakenByStudent = _courseRepository.GetCoursesTakenByStudent(studentId);
+            var completedCourses = _courseRepository.GetCompletedCoursesTakenByStudent(studentId);
 
-            //check if the student is enrolled in any course
-            if (!coursesTakenByStudent.Any())
+            //check if the student has any enrolled or finished courses
+            if (!coursesTakenByStudent.Any() && !completedCourses.Any())
             {
                 Console.WriteLine($"Student {student.Name} is not enrolled in any course.");
                 return;
             }
 
-            var completedCourses = _courseRepository.GetCompletedCoursesTakenByStudent(studentId);
-
-            Console.WriteLine($"Student {student.Name} is enrolled in the following courses:");
-            foreach (var course in coursesTakenByStudent)
+            // check if the student has enrolled courses
+            if (coursesTakenByStudent.Any())
             {
-                Console.WriteLine($"Course ID: {course.Id} - {course.Name}");
+                Console.WriteLine($"Student {student.Name} is enrolled in the following courses:");
+                foreach (var course in coursesTakenByStudent)
+                {
+                    Console.WriteLine($"Course ID: {course.Id} - {course.Name}");
+                }
             }
+
+            // check if the student has finished courses
             if (completedCourses.Any())
             {
                 Console.WriteLine($"The following courses are finished by student {student.Name}");

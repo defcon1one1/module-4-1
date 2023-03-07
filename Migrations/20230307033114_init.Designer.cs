@@ -11,8 +11,8 @@ using module_4_1.DAL;
 namespace module_4_1.Migrations
 {
     [DbContext(typeof(UniversityDbContext))]
-    [Migration("20230306223407_fix01")]
-    partial class fix01
+    [Migration("20230307033114_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,8 @@ namespace module_4_1.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -60,9 +61,10 @@ namespace module_4_1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
-
                     b.HasIndex("StudentId");
+
+                    b.HasIndex("CourseId", "StudentId")
+                        .IsUnique();
 
                     b.ToTable("CourseEnrollments");
                 });
@@ -110,9 +112,13 @@ namespace module_4_1.Migrations
 
                     b.HasIndex("CourseEnrollmentId");
 
-                    b.HasIndex("ModuleId");
+                    b.HasIndex("ModuleId", "CourseEnrollmentId")
+                        .IsUnique();
 
-                    b.ToTable("ModuleGrades");
+                    b.ToTable("ModuleGrades", t =>
+                        {
+                            t.HasCheckConstraint("CK_ModuleGrade_Grade", "[Grade] BETWEEN 3 AND 5");
+                        });
                 });
 
             modelBuilder.Entity("module_4_1.DAL.Student", b =>
@@ -125,7 +131,8 @@ namespace module_4_1.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -135,7 +142,7 @@ namespace module_4_1.Migrations
             modelBuilder.Entity("module_4_1.DAL.CourseEnrollment", b =>
                 {
                     b.HasOne("module_4_1.DAL.Course", "Course")
-                        .WithMany()
+                        .WithMany("CourseEnrollments")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -183,6 +190,8 @@ namespace module_4_1.Migrations
 
             modelBuilder.Entity("module_4_1.DAL.Course", b =>
                 {
+                    b.Navigation("CourseEnrollments");
+
                     b.Navigation("Modules");
                 });
 

@@ -35,8 +35,12 @@ namespace module_4_1.DAL
             var students = new List<Student>
             {
                 new Student { Name = "John Smith" },
-                new Student { Name = "Jane Doe" },
-                new Student { Name = "Bob Johnson" }
+                new Student { Name = "Anna Doe" },
+                new Student { Name = "Bob Johnson" },
+                new Student { Name = "Frank Underwood" },
+                new Student { Name = "Matthew Harris" },
+                new Student { Name = "Gregory Taylor" }
+
             };
 
             foreach (var student in students)
@@ -48,7 +52,9 @@ namespace module_4_1.DAL
             var courses = new List<Course>
             {
                 new Course { Name = "Math" },
-                new Course { Name = "History" }
+                new Course { Name = "History" },
+                new Course { Name = "Biology"},
+                new Course { Name = "Chemistry" }
             };
 
             foreach (var course in courses)
@@ -64,8 +70,21 @@ namespace module_4_1.DAL
             {
                 new Module { Name = "Algebra", CourseId = 1 },
                 new Module { Name = "Calculus", CourseId = 1 },
+                new Module { Name = "Statistics", CourseId = 1 },
+
                 new Module { Name = "Medieval history", CourseId = 2 },
                 new Module { Name = "Modern history", CourseId = 2 },
+                new Module { Name = "Ancient history", CourseId = 2},
+
+                new Module { Name = "Science of evolution", CourseId = 3 },
+                new Module { Name = "History of biology", CourseId = 3 },
+                new Module { Name = "Genetics", CourseId = 3},
+
+                new Module { Name = "Basics of chemistry", CourseId = 4 },
+                new Module { Name = "Organic chemistry", CourseId = 4 },
+                new Module { Name = "Practical chemistry", CourseId = 4}
+
+
             };
 
             foreach (var module in modules)
@@ -79,7 +98,12 @@ namespace module_4_1.DAL
             var enrollments = new List<CourseEnrollment>
             {
                 new CourseEnrollment {IsCompleted = false, StudentId = 1, CourseId = 1 },
-                new CourseEnrollment {IsCompleted = false, StudentId = 2, CourseId = 2 }
+                new CourseEnrollment {IsCompleted = true, StudentId = 1, CourseId = 2 },
+
+                new CourseEnrollment {IsCompleted = false, StudentId = 2, CourseId = 2 },
+                new CourseEnrollment {IsCompleted = false, StudentId = 2, CourseId = 3 },
+
+                new CourseEnrollment {IsCompleted = false, StudentId = 3, CourseId = 4 }
             };
 
             foreach (var enrollment in enrollments)
@@ -94,7 +118,17 @@ namespace module_4_1.DAL
             {
                 new ModuleGrade { Grade = 3, ModuleId = 1, CourseEnrollmentId = 1 },
                 new ModuleGrade { Grade = 5, ModuleId = 2, CourseEnrollmentId = 1 },
-                new ModuleGrade { Grade = 4, ModuleId = 3, CourseEnrollmentId = 2 },
+
+                new ModuleGrade { Grade = 3, ModuleId = 4, CourseEnrollmentId = 1 },
+                new ModuleGrade { Grade = 5, ModuleId = 5, CourseEnrollmentId = 1 },
+                new ModuleGrade { Grade = 4, ModuleId = 6, CourseEnrollmentId = 1 },
+
+                new ModuleGrade { Grade = 3, ModuleId = 4, CourseEnrollmentId = 2 },
+                new ModuleGrade { Grade = 5, ModuleId = 5, CourseEnrollmentId = 2 },
+
+                new ModuleGrade { Grade = 3, ModuleId = 10, CourseEnrollmentId = 3 }
+
+
             };
 
             foreach (var grade in grades)

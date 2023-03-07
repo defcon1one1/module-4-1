@@ -19,6 +19,18 @@ namespace module_4_1.DAL
             {
                 eb.HasKey(e => e.Id);
 
+                eb.HasIndex(e => new { e.CourseId, e.StudentId }).IsUnique();
+
+                eb.HasOne(e => e.Student)
+                    .WithMany(s => s.CourseEnrollments)
+                    .HasForeignKey(e => e.StudentId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                eb.HasOne(e => e.Course)
+                    .WithMany(c => c.CourseEnrollments)
+                    .HasForeignKey(e => e.CourseId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
                 eb.HasMany(ce => ce.ModuleGrades)
                     .WithOne(mg => mg.CourseEnrollment)
                     .HasForeignKey(mg => mg.CourseEnrollmentId);
@@ -55,6 +67,8 @@ namespace module_4_1.DAL
                 eb.HasKey(e => e.Id);
 
                 eb.ToTable(e => e.HasCheckConstraint("CK_ModuleGrade_Grade", "[Grade] BETWEEN 3 AND 5"));
+
+                eb.HasIndex(e => new { e.ModuleId, e.CourseEnrollmentId }).IsUnique();
 
                 eb.HasOne(mg => mg.Module)
                     .WithMany()

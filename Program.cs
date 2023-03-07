@@ -11,12 +11,17 @@ namespace module_4_1
 
             var studentRepo = new Repository<Student>(context);
             var courseRepo = new Repository<Course>(context);
-            var courseEnRepo = new Repository<CourseEnrollment>(context);
+            var enrollmentsRepo = new Repository<CourseEnrollment>(context);
             var moduleRepo = new Repository<Module>(context);
-            var moduleGradeRepo = new Repository<ModuleGrade>(context);
+            var gradesRepo = new Repository<ModuleGrade>(context);
 
-            var menu = new Menu(studentRepo, courseRepo, courseEnRepo, moduleRepo, moduleGradeRepo);
+            //var dataSeeder = new DataSeeder(studentRepo, courseRepo, enrollmentsRepo, moduleRepo, gradesRepo);
+            //dataSeeder.Seed();
+
+            var menu = new Menu(studentRepo, courseRepo, enrollmentsRepo, moduleRepo, gradesRepo);
             menu.RunMenu();
+
+
 
 
         }

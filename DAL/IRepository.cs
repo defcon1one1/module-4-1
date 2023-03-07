@@ -15,5 +15,8 @@
         IEnumerable<Course> GetCoursesTakenByStudent(int studentId);
         IEnumerable<ModuleGrade> GetGradesForStudentInCourse(int studentId, int courseId);
 
+        public void AddGrade(int studentId, int moduleId, int grade);
+        void MarkCourseAsComplete(int studentId, int courseId);
+
     }
 }
